@@ -465,15 +465,7 @@ const closeFeedbackModal = () => {
             <p>{{ selectedFeedback?.description }}</p>
           </div>
           
-          <div v-if="selectedFeedback?.location" class="feedback-location">
-            <h4>Location:</h4>
-            <div class="mini-map">
-              <FeedbackMap 
-                :feedbackItems="[selectedFeedback]"
-                :interactive="false"
-              />
-            </div>
-          </div>
+
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" @click="closeFeedbackModal">Close</button>
