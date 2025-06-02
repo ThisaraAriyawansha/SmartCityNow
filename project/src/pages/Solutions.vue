@@ -204,23 +204,32 @@ const solutions = [
 
 <style scoped>
 .page-header {
-  background-color: var(--color-secondary-600);
+  /* Replace with your preferred image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                    url('https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   padding: var(--space-16) 0 var(--space-10);
   text-align: center;
+  position: relative; /* Ensures the overlay works correctly */
 }
 
 .page-header h1 {
   margin-bottom: var(--space-4);
   color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Optional: improves text readability */
 }
 
 .page-description {
   max-width: 800px;
   margin: 0 auto;
   font-size: 1.125rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Optional: improves text readability */
 }
 
+/* Rest of your existing styles remain unchanged */
 .solutions-grid {
   display: grid;
   grid-template-columns: 1fr;

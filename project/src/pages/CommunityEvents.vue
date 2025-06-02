@@ -30,6 +30,7 @@ const handleRegistration = async (userData) => {
   }
 }
 
+
 const upcomingEvents = [
   {
     id: 1,
