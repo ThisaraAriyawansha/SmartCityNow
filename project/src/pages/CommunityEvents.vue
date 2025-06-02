@@ -99,6 +99,8 @@ const upcomingEvents = [
     remaining: 43
   }
 ]
+
+
 </script>
 
 <template>
@@ -132,85 +134,7 @@ const upcomingEvents = [
     </section>
     
     <!-- Community Calendar -->
-    <section class="section calendar-section">
-      <div class="container">
-        <h2 class="section-title">Smart City Initiative Timeline</h2>
-        <p class="section-subtitle">
-          Our community's journey toward becoming a smarter, more sustainable city involves 
-          many events and milestones. Here's what's coming up in the months ahead.
-        </p>
-        
-        <div class="calendar-container">
-          <div class="timeline">
-            <div class="timeline-marker current">
-              <div class="marker-label">Now</div>
-            </div>
-            <div class="timeline-marker">
-              <div class="marker-label">3 months</div>
-            </div>
-            <div class="timeline-marker">
-              <div class="marker-label">6 months</div>
-            </div>
-            <div class="timeline-marker">
-              <div class="marker-label">9 months</div>
-            </div>
-            <div class="timeline-marker">
-              <div class="marker-label">12 months</div>
-            </div>
-          </div>
-          
-          <div class="timeline-events">
-            <div class="timeline-event" style="left: 0%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Community Workshops</div>
-                <div class="event-description">Initial planning and feedback sessions</div>
-              </div>
-            </div>
-            
-            <div class="timeline-event" style="left: 15%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Pilot Sensor Deployment</div>
-                <div class="event-description">Installation of first air quality and traffic sensors</div>
-              </div>
-            </div>
-            
-            <div class="timeline-event" style="left: 30%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Mobile App Launch</div>
-                <div class="event-description">Release of city services and information app</div>
-              </div>
-            </div>
-            
-            <div class="timeline-event" style="left: 50%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Smart Traffic Pilot</div>
-                <div class="event-description">Adaptive traffic signals at 5 key intersections</div>
-              </div>
-            </div>
-            
-            <div class="timeline-event" style="left: 65%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Green Roof Installation</div>
-                <div class="event-description">First public building green roof completion</div>
-              </div>
-            </div>
-            
-            <div class="timeline-event" style="left: 85%;">
-              <div class="event-dot"></div>
-              <div class="event-content">
-                <div class="event-title">Smart City Summit</div>
-                <div class="event-description">Regional conference hosted in our city</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
     
     <!-- Host Your Own Event -->
     <section class="section host-section">
