@@ -32,143 +32,162 @@ app.post('/api/register', async (req, res) => {
     subject: `Registration Confirmation for ${event.title}`,
     html: `
       <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            color: #333333;
-          }
-          .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-          }
-          .header {
-            background-color: #1a73e8;
-            padding: 20px;
-            text-align: center;
-            color: #ffffff;
-          }
-          .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-          }
-          .content {
-            padding: 30px;
-          }
-          .content h2 {
-            color: #1a73e8;
-            font-size: 24px;
-            margin-bottom: 20px;
-          }
-          .content p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 20px;
-          }
-          .event-details {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-          }
-          .event-details ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-          }
-          .event-details li {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #555555;
-          }
-          .event-details li strong {
-            color: #333333;
-          }
-          .cta-button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #1a73e8;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 16px;
-            margin: 20px 0;
-            text-align: center;
-          }
-          .footer {
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-            font-size: 14px;
-            color: #777777;
-          }
-          .footer a {
-            color: #1a73e8;
-            text-decoration: none;
-          }
-          @media only screen and (max-width: 600px) {
-            .container {
-              margin: 10px;
-            }
-            .content {
-              padding: 20px;
-            }
-            .header {
-              padding: 15px;
-            }
-            .header h1 {
-              font-size: 20px;
-            }
-            .cta-button {
-              display: block;
-              width: 100%;
-              box-sizing: border-box;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Smart City Initiative</h1>
-          </div>
-          <div class="content">
-            <h2>Registration Successful!</h2>
-            <p>Dear ${user.name},</p>
-            <p>Thank you for registering for <strong>${event.title}</strong>. We're excited to have you join us!</p>
-            <div class="event-details">
-              <p><strong>Event Details:</strong></p>
-              <ul>
-                <li><strong>Date:</strong> ${event.date}</li>
-                <li><strong>Time:</strong> ${event.time}</li>
-                <li><strong>Location:</strong> ${event.location}</li>
-                <li><strong>Number of Attendees:</strong> ${user.attendees}</li>
-                <li><strong>Description:</strong> ${event.description}</li>
-              </ul>
-            </div>
-            <p>We look forward to seeing you there! Add this event to your calendar or visit our website for more details.</p>
-            <a href="#" class="cta-button">View Event Details</a>
-          </div>
-          <div class="footer">
-            <p>Smart City Initiative Team<br>
-            <a href="mailto:support@smartcityinitiative.com">support@smartcityinitiative.com</a> | 
-            <a href="#">www.smartcityinitiative.com</a></p>
-            <p>If you have any questions, feel free to contact us!</p>
-          </div>
-        </div>
-      </body>
-      </html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f7fa;
+      color: #1f2a44;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 640px;
+      margin: 24px auto;
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      padding: 32px;
+      text-align: center;
+      color: #ffffff;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .content {
+      padding: 40px;
+    }
+    .content h2 {
+      color: #3b82f6;
+      font-size: 26px;
+      font-weight: 600;
+      margin: 0 0 24px;
+    }
+    .content p {
+      font-size: 16px;
+      margin: 0 0 20px;
+      color: #4b5563;
+    }
+    .event-details {
+      background-color: #f8fafc;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 4px solid #3b82f6;
+    }
+    .event-details ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .event-details li {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #4b5563;
+    }
+    .event-details li strong {
+      color: #1f2a44;
+      font-weight: 600;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 12px 32px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .footer {
+      background-color: #f1f5f9;
+      padding: 24px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    @media only screen and (max-width: 600px) {
+      .container {
+        margin: 12px;
+        border-radius: 12px;
+      }
+      .content {
+        padding: 24px;
+      }
+      .header {
+        padding: 24px;
+      }
+      .header h1 {
+        font-size: 24px;
+      }
+      .event-details {
+        padding: 20px;
+      }
+      .cta-button {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Smart City Initiative</h1>
+    </div>
+    <div class="content">
+      <h2>Registration Confirmed!</h2>
+      <p>Dear ${user.name},</p>
+      <p>We're thrilled to confirm your registration for <strong>${event.title}</strong>. Get ready for an exciting experience!</p>
+      <div class="event-details">
+        <p><strong>Event Details:</strong></p>
+        <ul>
+          <li><strong>Date:</strong> ${event.date}</li>
+          <li><strong>Time:</strong> ${event.time}</li>
+          <li><strong>Location:</strong> ${event.location}</li>
+          <li><strong>Attendees:</strong> ${user.attendees}</li>
+          <li><strong>Description:</strong> ${event.description}</li>
+        </ul>
+      </div>
+      <p>Mark your calendar and join us for an unforgettable event. Visit our website for more details or to manage your registration.</p>
+      <a href="#" class="cta-button">Explore Event Details</a>
+    </div>
+    <div class="footer">
+      <p>Smart City Initiative Team<br>
+      <a href="mailto:support@smartcityinitiative.com">support@smartcityinitiative.com</a> | 
+      <a href="#">www.smartcityinitiative.com</a></p>
+      <p>Questions? We're here to help!</p>
+    </div>
+  </div>
+</body>
+</html>
     `
   };
 
