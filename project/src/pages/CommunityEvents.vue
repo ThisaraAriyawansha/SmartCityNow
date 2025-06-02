@@ -2,9 +2,11 @@
 import EventCard from '../components/events/EventCard.vue'
 import RegisterForm from '../components/events/RegisterForm.vue'
 import { ref } from 'vue'
+import axios from 'axios'
 
 const showRegistrationForm = ref(false)
 const selectedEvent = ref(null)
+const registrationStatus = ref('')
 
 const openRegistration = (event) => {
   selectedEvent.value = event
@@ -13,6 +15,19 @@ const openRegistration = (event) => {
 
 const closeRegistration = () => {
   showRegistrationForm.value = false
+  registrationStatus.value = ''
+}
+
+const handleRegistration = async (userData) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/register', {
+      event: selectedEvent.value,
+      user: userData
+    })
+    registrationStatus.value = response.data.message
+  } catch (error) {
+    registrationStatus.value = error.response?.data?.error || 'Registration failed'
+  }
 }
 
 const upcomingEvents = [
@@ -232,7 +247,8 @@ const upcomingEvents = [
           {{ selectedEvent?.date }} at {{ selectedEvent?.time }}<br>
           Location: {{ selectedEvent?.location }}
         </p>
-        <RegisterForm :event="selectedEvent" @close="closeRegistration" />
+        <p v-if="registrationStatus" class="registration-status">{{ registrationStatus }}</p>
+        <RegisterForm :event="selectedEvent" @close="closeRegistration" @submit="handleRegistration" />
       </div>
     </div>
   </div>
@@ -495,5 +511,11 @@ const upcomingEvents = [
   margin-bottom: var(--space-4);
   color: var(--color-neutral-600);
   font-size: 0.9375rem;
+}
+
+.registration-status {
+  color: var(--color-primary-700);
+  margin-bottom: var(--space-4);
+  text-align: center;
 }
 </style>

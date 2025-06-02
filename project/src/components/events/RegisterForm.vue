@@ -8,7 +8,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'submit'])
 
 const formData = ref({
   name: '',
@@ -58,11 +58,10 @@ const submitForm = () => {
   isSubmitting.value = true
   formError.value = ''
   
-  // Simulate API call
-  setTimeout(() => {
-    isSubmitting.value = false
-    isSubmitted.value = true
-  }, 1000)
+  // Emit the form data to the parent component
+  emit('submit', formData.value)
+  isSubmitting.value = false
+  isSubmitted.value = true
 }
 </script>
 

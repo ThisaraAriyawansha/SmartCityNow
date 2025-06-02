@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import CommentList from '../components/feedback/CommentList.vue'
 import CommentForm from '../components/feedback/CommentForm.vue'
+import LocationPicker from '../components/feedback/LocationPicker.vue'
+import FeedbackMap from '../components/feedback/FeedbackMap.vue'
 
 // Simulated comments data
 const comments = ref([
@@ -47,7 +49,36 @@ const comments = ref([
   }
 ])
 
+// Feedback data with location
+const feedbackItems = ref([
+  {
+    id: 1001,
+    author: 'Kamal Perera',
+    date: '2025-05-15T14:30:00',
+    title: 'Traffic congestion near Galle Face',
+    category: 'Traffic & Transportation',
+    description: 'The traffic near Galle Face Green during weekends is unbearable. We need smart traffic lights to manage the flow.',
+    location: { lat: 6.9271, lng: 79.8412 }, // Colombo coordinates
+    status: 'Under Review'
+  },
+  {
+    id: 1002,
+    author: 'Nimali Fernando',
+    date: '2025-05-14T09:15:00',
+    title: 'Waste collection in Kandy',
+    category: 'Waste Management',
+    description: 'The waste collection schedule in Kandy city center is inconsistent. Smart bins with fill-level sensors would help optimize collection routes.',
+    location: { lat: 7.2906, lng: 80.6337 }, // Kandy coordinates
+    status: 'In Progress'
+  }
+])
+
 const activeTab = ref('comments')
+const showLocationPicker = ref(false)
+const selectedLocation = ref<{lat: number, lng: number} | null>(null)
+const selectedFeedback = ref<any>(null)
+const showFeedbackModal = ref(false)
+
 const feedbackCategories = ref([
   'Traffic & Transportation',
   'Energy & Utilities',
@@ -58,10 +89,20 @@ const feedbackCategories = ref([
   'Other'
 ])
 
+// Form data
+const feedbackForm = ref({
+  name: '',
+  email: '',
+  category: '',
+  title: '',
+  description: '',
+  location: null as {lat: number, lng: number} | null
+})
+
 // Add a new comment
-const addComment = (newComment) => {
+const addComment = (newComment: any) => {
   const commentObj = {
-    id: comments.value.length + 10, // Simple ID generation
+    id: comments.value.length + 10,
     author: newComment.author,
     date: new Date().toISOString(),
     content: newComment.content,
@@ -73,11 +114,11 @@ const addComment = (newComment) => {
 }
 
 // Add a reply to a comment
-const addReply = (commentId, reply) => {
+const addReply = (commentId: number, reply: any) => {
   const comment = comments.value.find(c => c.id === commentId)
   if (comment) {
     const replyObj = {
-      id: Date.now(), // Simple ID generation
+      id: Date.now(),
       author: reply.author,
       date: new Date().toISOString(),
       content: reply.content,
@@ -89,7 +130,7 @@ const addReply = (commentId, reply) => {
 }
 
 // Like a comment
-const likeComment = (commentId, isReply = false, parentId = null) => {
+const likeComment = (commentId: number, isReply = false, parentId = null) => {
   if (!isReply) {
     const comment = comments.value.find(c => c.id === commentId)
     if (comment) {
@@ -105,6 +146,63 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
     }
   }
 }
+
+// Open location picker
+const openLocationPicker = () => {
+  showLocationPicker.value = true
+}
+
+// Handle location selection
+const handleLocationSelect = (location: {lat: number, lng: number}) => {
+  selectedLocation.value = location
+  feedbackForm.value.location = location
+  showLocationPicker.value = false
+}
+
+// Submit feedback
+const submitFeedback = () => {
+  if (!feedbackForm.value.name || !feedbackForm.value.title || !feedbackForm.value.description) {
+    alert('Please fill in all required fields')
+    return
+  }
+  
+  const newFeedback = {
+    id: Date.now(),
+    author: feedbackForm.value.name,
+    date: new Date().toISOString(),
+    title: feedbackForm.value.title,
+    category: feedbackForm.value.category || 'Other',
+    description: feedbackForm.value.description,
+    location: feedbackForm.value.location,
+    status: 'New'
+  }
+  
+  feedbackItems.value.unshift(newFeedback)
+  
+  // Reset form
+  feedbackForm.value = {
+    name: '',
+    email: '',
+    category: '',
+    title: '',
+    description: '',
+    location: null
+  }
+  
+  selectedLocation.value = null
+  activeTab.value = 'comments'
+}
+
+// View feedback details
+const viewFeedbackDetails = (feedback: any) => {
+  selectedFeedback.value = feedback
+  showFeedbackModal.value = true
+}
+
+// Close feedback modal
+const closeFeedbackModal = () => {
+  showFeedbackModal.value = false
+}
 </script>
 
 <template>
@@ -114,9 +212,8 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
       <div class="container">
         <h1>Community Feedback</h1>
         <p class="page-description">
-          Share your thoughts, ideas, and concerns about smart city initiatives. Your feedback 
-          helps shape the future of our urban environment and ensures that solutions address 
-          real community needs.
+          Share your thoughts, ideas, and concerns about smart city initiatives in Sri Lanka. 
+          Your feedback helps shape the future of our urban environment.
         </p>
       </div>
     </section>
@@ -147,8 +244,8 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
             <div class="comments-header">
               <h2>Community Discussion</h2>
               <p>
-                Join the conversation about smart city initiatives. Share your thoughts, 
-                ask questions, and engage with other community members.
+                Join the conversation about smart city initiatives in Sri Lanka. 
+                Share your thoughts, ask questions, and engage with other community members.
               </p>
             </div>
             
@@ -166,19 +263,21 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
             <div class="ideas-header">
               <h2>Submit Your Feedback</h2>
               <p>
-                Have ideas for improving our city? Share your suggestions, report issues, 
-                or propose innovative solutions to urban challenges.
+                Have ideas for improving our cities in Sri Lanka? Share your suggestions, 
+                report issues, or propose innovative solutions to urban challenges.
               </p>
             </div>
             
             <div class="feedback-form">
               <div class="form-group">
-                <label for="name" class="form-label">Your Name</label>
+                <label for="name" class="form-label">Your Name *</label>
                 <input 
                   type="text" 
                   id="name" 
                   class="form-input" 
                   placeholder="Enter your name"
+                  v-model="feedbackForm.name"
+                  required
                 >
               </div>
               
@@ -189,12 +288,17 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
                   id="email" 
                   class="form-input" 
                   placeholder="Enter your email"
+                  v-model="feedbackForm.email"
                 >
               </div>
               
               <div class="form-group">
                 <label for="category" class="form-label">Feedback Category</label>
-                <select id="category" class="form-input">
+                <select 
+                  id="category" 
+                  class="form-input"
+                  v-model="feedbackForm.category"
+                >
                   <option value="">Select a category</option>
                   <option 
                     v-for="category in feedbackCategories" 
@@ -207,40 +311,75 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
               </div>
               
               <div class="form-group">
-                <label for="title" class="form-label">Feedback Title</label>
+                <label for="title" class="form-label">Feedback Title *</label>
                 <input 
                   type="text" 
                   id="title" 
                   class="form-input" 
                   placeholder="Enter a brief title for your feedback"
+                  v-model="feedbackForm.title"
+                  required
                 >
               </div>
               
               <div class="form-group">
-                <label for="description" class="form-label">Detailed Description</label>
+                <label for="description" class="form-label">Detailed Description *</label>
                 <textarea 
                   id="description" 
                   class="form-input form-textarea" 
                   placeholder="Please provide details about your feedback, idea, or concern..."
+                  v-model="feedbackForm.description"
+                  required
                 ></textarea>
               </div>
               
               <div class="form-group">
                 <label class="form-label">Location (if applicable)</label>
-                <div class="location-map">
-                  <div class="map-placeholder">
-                    <div class="map-overlay">
-                      <p>Click on the map to select a location</p>
-                    </div>
+                <div class="location-section">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline"
+                    @click="openLocationPicker"
+                  >
+                    {{ feedbackForm.location ? 'Change Location' : 'Select Location on Map' }}
+                  </button>
+                  
+                  <div v-if="feedbackForm.location" class="location-preview">
+                    <p>Selected Location:</p>
+                    <p>Latitude: {{ feedbackForm.location.lat.toFixed(4) }}, Longitude: {{ feedbackForm.location.lng.toFixed(4) }}</p>
                   </div>
                 </div>
               </div>
               
               <div class="form-actions">
-                <button class="btn btn-primary">Submit Feedback</button>
+                <button 
+                  class="btn btn-primary"
+                  @click="submitFeedback"
+                >
+                  Submit Feedback
+                </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Feedback Map Section -->
+    <section class="section map-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Feedback Locations</h2>
+          <p class="section-subtitle">
+            View community feedback pinned on the Sri Lanka map. Click on markers to see details.
+          </p>
+        </div>
+        
+        <div class="map-container">
+          <FeedbackMap 
+            :feedbackItems="feedbackItems"
+            @marker-click="viewFeedbackDetails"
+          />
         </div>
       </div>
     </section>
@@ -251,40 +390,96 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
         <div class="section-header text-center">
           <h2>Community Impact Stories</h2>
           <p class="section-subtitle">
-            See how community feedback has shaped our smart city initiatives and made a real difference.
+            See how community feedback has shaped our smart city initiatives across Sri Lanka.
           </p>
         </div>
         
         <div class="success-grid">
           <div class="success-card">
             <div class="success-icon">💡</div>
-            <h3>Neighborhood Solar Program</h3>
+            <h3>Colombo Traffic Management</h3>
             <p>
-              A resident's suggestion led to a community solar initiative that now powers 
-              street lights in three neighborhoods, reducing energy costs by 40%.
+              Resident feedback led to smart traffic lights at 10 major intersections in Colombo,
+              reducing average commute times by 25% during peak hours.
             </p>
           </div>
           
           <div class="success-card">
             <div class="success-icon">🚸</div>
-            <h3>School Zone Safety</h3>
+            <h3>Kandy Pedestrian Safety</h3>
             <p>
-              Parent feedback resulted in smart crosswalks with motion sensors and warning 
-              lights near schools, improving pedestrian safety for children.
+              Community suggestions resulted in smart crosswalks with motion sensors near schools
+              in Kandy, improving safety for thousands of students.
             </p>
           </div>
           
           <div class="success-card">
             <div class="success-icon">♻️</div>
-            <h3>Community Composting</h3>
+            <h3>Galle Waste Management</h3>
             <p>
-              A suggestion from our feedback forum led to the creation of five community 
-              composting stations, diverting tons of organic waste from landfills.
+              Feedback from Galle residents led to solar-powered smart waste bins that notify
+              collectors when full, reducing overflow incidents by 80%.
             </p>
           </div>
         </div>
       </div>
     </section>
+    
+    <!-- Location Picker Modal -->
+    <div v-if="showLocationPicker" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Select Location on Sri Lanka Map</h3>
+          <button class="modal-close" @click="showLocationPicker = false">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <LocationPicker 
+            @location-selected="handleLocationSelect"
+            @cancel="showLocationPicker = false"
+          />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Feedback Details Modal -->
+    <div v-if="showFeedbackModal" class="modal-overlay">
+      <div class="modal-content feedback-modal">
+        <div class="modal-header">
+          <h3>{{ selectedFeedback?.title }}</h3>
+          <button class="modal-close" @click="closeFeedbackModal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="feedback-meta">
+            <p><strong>Submitted by:</strong> {{ selectedFeedback?.author }}</p>
+            <p><strong>Date:</strong> {{ new Date(selectedFeedback?.date).toLocaleDateString() }}</p>
+            <p><strong>Category:</strong> {{ selectedFeedback?.category }}</p>
+            <p><strong>Status:</strong> <span class="status-badge">{{ selectedFeedback?.status }}</span></p>
+          </div>
+          
+          <div class="feedback-description">
+            <h4>Description:</h4>
+            <p>{{ selectedFeedback?.description }}</p>
+          </div>
+          
+          <div v-if="selectedFeedback?.location" class="feedback-location">
+            <h4>Location:</h4>
+            <div class="mini-map">
+              <FeedbackMap 
+                :feedbackItems="[selectedFeedback]"
+                :interactive="false"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" @click="closeFeedbackModal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -387,35 +582,61 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
   resize: vertical;
 }
 
-.location-map {
+.location-section {
+  margin-top: var(--space-2);
+}
+
+.location-preview {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--color-neutral-50);
   border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.map-placeholder {
-  height: 200px;
-  background-image: url('https://images.pexels.com/photos/417322/pexels-photo-417322.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
-
-.map-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 0.875rem;
 }
 
 .form-actions {
   margin-top: var(--space-6);
+  text-align: right;
+}
+
+.btn {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-600);
+  color: white;
+  border: 1px solid var(--color-primary-600);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-700);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-primary-600);
+  color: var(--color-primary-600);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary-50);
+}
+
+.map-section {
+  background-color: var(--color-neutral-100);
+  padding-bottom: var(--space-10);
+}
+
+.map-container {
+  height: 500px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .success-section {
@@ -424,6 +645,10 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
 
 .section-header {
   margin-bottom: var(--space-8);
+}
+
+.section-header.text-center {
+  text-align: center;
 }
 
 .section-subtitle {
@@ -466,5 +691,95 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
   color: var(--color-neutral-600);
   font-size: 0.9375rem;
   margin-bottom: 0;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-neutral-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-neutral-600);
+}
+
+.modal-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.modal-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-neutral-200);
+  text-align: right;
+}
+
+/* Feedback Modal Specific Styles */
+.feedback-modal .modal-body {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.feedback-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.feedback-description {
+  margin-top: var(--space-4);
+}
+
+.mini-map {
+  height: 200px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: var(--space-3);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-800);
 }
 </style>
