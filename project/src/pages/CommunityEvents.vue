@@ -78,7 +78,7 @@ const upcomingEvents = [
     time: '11:00 AM - 3:00 PM',
     location: 'Tech Innovation Center',
     description: 'Experience the future of urban transportation with demonstrations of autonomous shuttle technology. Learn how self-driving vehicles will integrate with our city\'s transportation network and the benefits they offer for mobility and accessibility.',
-    image: 'https://images.pexels.com/photos/10701825/pexels-photo-10701825.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: 'https://eu-images.contentstack.com/v3/assets/blt7121b6ec5c11097b/bltd805201499042237/661959be333120672ac1ab65/autonomous_20vehicle.jpg?width=1280&auto=webp&quality=95&format=jpg&disable=upscale',
     spots: 120,
     remaining: 43
   }
