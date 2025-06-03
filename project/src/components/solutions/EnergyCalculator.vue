@@ -5,8 +5,17 @@ const buildingSize = ref(2000) // in square feet
 const currentUsage = ref(15) // in kWh per square foot per month
 const efficiencyPercentage = ref(30) // percentage improvement
 
-// Energy rates in cents per kWh
-const energyRate = 0.15
+// Energy rates in Rs per kWh
+const energyRate = 30 // Approximately 30 Rs/kWh based on Sri Lanka rates
+
+// Format currency in Rs (Sri Lankan Rupees)
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-LK', {
+    style: 'currency',
+    currency: 'LKR',
+    minimumFractionDigits: 2,
+  }).format(value);
+};
 
 // Calculate monthly and yearly savings
 const monthlySavings = computed(() => {
@@ -38,8 +47,8 @@ const co2Reduction = computed(() => {
 })
 
 const paybackPeriod = computed(() => {
-  // Assuming $2 per sq ft implementation cost
-  const implementationCost = buildingSize.value * 2
+  // Assuming 600 Rs per sq ft implementation cost
+  const implementationCost = buildingSize.value * 600
   const annualCostSavings = parseFloat(annualSavings.value.cost)
   const paybackYears = implementationCost / annualCostSavings
   return paybackYears.toFixed(1)
@@ -98,12 +107,12 @@ const paybackPeriod = computed(() => {
         
         <div class="results-grid">
           <div class="result-card">
-            <div class="result-value">${{ monthlySavings.cost }}</div>
+            <div class="result-value">{{ formatCurrency(parseFloat(monthlySavings.cost)) }}</div>
             <div class="result-label">Monthly Cost Savings</div>
           </div>
           
           <div class="result-card">
-            <div class="result-value">${{ annualSavings.cost }}</div>
+            <div class="result-value">{{ formatCurrency(parseFloat(annualSavings.cost)) }}</div>
             <div class="result-label">Annual Cost Savings</div>
           </div>
           
@@ -124,8 +133,8 @@ const paybackPeriod = computed(() => {
         </div>
         
         <div class="calculator-note">
-          Note: This calculator provides estimates based on typical values. Actual savings may vary 
-          based on building specifics, implementation details, and energy costs in your area.
+          Note: All costs are in Rs (Sri Lankan Rupees). Estimates are based on typical values. 
+          Actual savings may vary based on building specifics and energy costs in Sri Lanka.
         </div>
       </div>
     </div>
