@@ -10,8 +10,8 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'fueltrixteam@gmail.com',
-    pass: 'eqnd bkeo iwqk egmh'
+    user: 'abc@gmail.com',
+    pass: 'password123' 
   }
 });
 
@@ -27,7 +27,7 @@ app.post('/api/register', async (req, res) => {
   }
 
   const mailOptions = {
-    from: 'fueltrixteam@gmail.com',
+    from: 'abc@gmail.com',
     to: user.email,
     subject: `Registration Confirmation for ${event.title}`,
     html: `

@@ -201,6 +201,7 @@ const submitForm = () => {
 .success-message {
   text-align: center;
   padding: var(--space-4) 0;
+  
 }
 
 .success-icon {
