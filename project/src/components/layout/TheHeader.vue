@@ -64,6 +64,11 @@ onUnmounted(() => {
               </router-link>
             </li>
             <li>
+              <router-link to="/time-line" @click="closeMenu" :class="{ active: route.path === '/time-line' }">
+                Time Line
+              </router-link>
+            </li>
+            <li>
               <router-link to="/feedback" @click="closeMenu" class="btn-nav" :class="{ active: route.path === '/feedback' }">
                 Feedback
               </router-link>

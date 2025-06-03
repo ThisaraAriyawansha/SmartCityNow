@@ -10,6 +10,8 @@ import LocalIssues from './pages/LocalIssues.vue'
 import Solutions from './pages/Solutions.vue'
 import CommunityEvents from './pages/CommunityEvents.vue'
 import Feedback from './pages/Feedback.vue'
+import TimeLine from './pages/TimeLine.vue';
+
 
 // Create router instance
 const router = createRouter({
@@ -19,7 +21,9 @@ const router = createRouter({
     { path: '/local-issues', component: LocalIssues },
     { path: '/solutions', component: Solutions },
     { path: '/community-events', component: CommunityEvents },
-    { path: '/feedback', component: Feedback }
+    { path: '/feedback', component: Feedback },
+    { path: '/time-line', component: TimeLine }
+
   ],
   scrollBehavior() {
     return { top: 0 }
