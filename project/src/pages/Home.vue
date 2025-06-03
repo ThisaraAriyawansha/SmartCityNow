@@ -4,6 +4,7 @@ import FeatureCard from '../components/home/FeatureCard.vue'
 import StatisticItem from '../components/home/StatisticItem.vue'
 import TestimonialCard from '../components/home/TestimonialCard.vue'
 
+// Define feature data for smart city solutions
 const features = [
   {
     id: 1,
@@ -31,6 +32,7 @@ const features = [
   }
 ]
 
+// Define statistics data for impact metrics
 const statistics = [
   {
     id: 1,
@@ -58,6 +60,7 @@ const statistics = [
   }
 ]
 
+// Define testimonial data from community members
 const testimonials = [
   {
     id: 1,
@@ -86,6 +89,7 @@ const testimonials = [
     
     <!-- Features Section -->
     <section class="section features-section">
+        <!-- Main container for the home page -->
       <div class="container">
         <div class="section-header text-center">
           <h2>Building Smarter Cities</h2>
