@@ -69,7 +69,7 @@ onUnmounted(() => {
               </router-link>
             </li>
             <li>
-              <router-link to="/feedback" @click="closeMenu" class="btn-nav" :class="{ active: route.path === '/feedback' }">
+              <router-link to="/feedback" @click="closeMenu"  :class="{ active: route.path === '/feedback' }">
                 Feedback
               </router-link>
             </li>

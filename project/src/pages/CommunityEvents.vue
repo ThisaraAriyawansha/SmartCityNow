@@ -181,21 +181,43 @@ const upcomingEvents = [
 
 <style scoped>
 .page-header {
-  background-color: var(--color-accent-600);
+  background-color: #2563eb;
   color: white;
-  padding: var(--space-16) 0 var(--space-10);
+  padding: 4rem 0 2.5rem;
   text-align: center;
+  background-image: url('https://www.party-planners.net/wp-content/uploads/2022/07/feature.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.page-header .container {
+  position: relative;
+  z-index: 2;
 }
 
 .page-header h1 {
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
   color: white;
+  font-size: 2.5rem;
 }
 
 .page-description {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem;
   font-size: 1.125rem;
+  line-height: 1.6;
 }
 
 .section-title {

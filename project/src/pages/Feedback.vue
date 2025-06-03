@@ -396,7 +396,7 @@ const closeFeedbackModal = () => {
         
         <div class="success-grid">
           <div class="success-card">
-            <div class="success-icon">💡</div>
+            <img src="https://media.istockphoto.com/id/1914071335/photo/crowds-and-businesses-on-the-streets-of-colombo-sri-lanka.jpg?s=612x612&w=0&k=20&c=ompqTDP1ADYtJpaFM13rV2LgPIU309f1OItJFL7vaJY=" alt="Smart traffic lights in Colombo" class="success-image">
             <h3>Colombo Traffic Management</h3>
             <p>
               Resident feedback led to smart traffic lights at 10 major intersections in Colombo,
@@ -405,7 +405,7 @@ const closeFeedbackModal = () => {
           </div>
           
           <div class="success-card">
-            <div class="success-icon">🚸</div>
+            <img src="https://www.intrepidtravel.com/adventures/wp-content/uploads/2018/05/Intrepid-Travel-sri-lanka_kandy_building_tuk-tuk.jpg" alt="Smart crosswalk in Kandy" class="success-image">
             <h3>Kandy Pedestrian Safety</h3>
             <p>
               Community suggestions resulted in smart crosswalks with motion sensors near schools
@@ -414,7 +414,7 @@ const closeFeedbackModal = () => {
           </div>
           
           <div class="success-card">
-            <div class="success-icon">♻️</div>
+            <img src="https://news.navy.lk/assets/images/news/neela_haritha_news/front_img/202408041000.jpg" alt="Solar-powered waste bin in Galle" class="success-image">
             <h3>Galle Waste Management</h3>
             <p>
               Feedback from Galle residents led to solar-powered smart waste bins that notify
@@ -477,22 +477,45 @@ const closeFeedbackModal = () => {
 
 <style scoped>
 .page-header {
-  background-color: var(--color-primary-600);
+  background-color: #2563eb;
   color: white;
-  padding: var(--space-16) 0 var(--space-10);
+  padding: 4rem 0 2.5rem;
   text-align: center;
+  background-image: url('https://t3.ftcdn.net/jpg/05/09/61/26/360_F_509612635_GUNAL869yGzr1DUOAjFahmDqDzgXaq9G.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.page-header .container {
+  position: relative;
+  z-index: 2;
 }
 
 .page-header h1 {
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
   color: white;
+  font-size: 2.5rem;
 }
 
 .page-description {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem;
   font-size: 1.125rem;
+  line-height: 1.6;
 }
+
 
 .tabs {
   display: flex;
@@ -773,5 +796,68 @@ const closeFeedbackModal = () => {
   text-transform: uppercase;
   background-color: var(--color-primary-100);
   color: var(--color-primary-800);
+}
+
+.success-section {
+  padding: 50px 0;
+  background-color: #f8f9fa; /* Light background for contrast */
+}
+
+.success-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.success-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.success-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.success-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Ensures images fit nicely without distortion */
+  border-radius: 8px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.success-card:hover .success-image {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.success-card h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+.success-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .success-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .success-image {
+    height: 150px; /* Smaller height for mobile */
+  }
 }
 </style>
