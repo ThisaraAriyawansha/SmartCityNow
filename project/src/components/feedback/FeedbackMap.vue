@@ -90,7 +90,7 @@ watch(
 const updateMarkers = () => {
   if (!map) return
 
-  markers.value.forEach(marker => map?.removeLayer(marker))
+  markers.value.forEach((marker: L.Marker) => map?.removeLayer(marker))
   markers.value = []
 
   const validMarkers: L.Marker[] = []
@@ -113,8 +113,8 @@ const updateMarkers = () => {
             </svg>
           `,
           iconSize: [24, 32],
-          iconAnchor: [12, 32], // Anchor at the bottom of the pin
-          popupAnchor: [0, -32] // Popup above the pin
+          iconAnchor: [12, 32],
+          popupAnchor: [0, -32]
         })
       }).addTo(map!)
 

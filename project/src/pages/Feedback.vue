@@ -1,12 +1,40 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import CommentList from '../components/feedback/CommentList.vue'
 import CommentForm from '../components/feedback/CommentForm.vue'
 import LocationPicker from '../components/feedback/LocationPicker.vue'
 import FeedbackMap from '../components/feedback/FeedbackMap.vue'
 
+interface Reply {
+  id: string | number
+  author: string
+  content: string
+  date: string
+  likes: number
+}
+
+interface Comment {
+  id: string | number
+  author: string
+  content: string
+  date: string
+  likes: number
+  replies: Reply[] // Changed to non-optional since initialized as []
+}
+
+interface Feedback {
+  id: number
+  author: string
+  date: string
+  title: string
+  category: string
+  description: string
+  location: { lat: number; lng: number } | null
+  status: string
+}
+
 // Simulated comments data
-const comments = ref([
+const comments = ref<Comment[]>([
   {
     id: 1,
     author: 'Sarah Johnson',
@@ -50,7 +78,7 @@ const comments = ref([
 ])
 
 // Feedback data with location
-const feedbackItems = ref([
+const feedbackItems = ref<Feedback[]>([
   {
     id: 1001,
     author: 'Kamal Perera',
@@ -75,8 +103,8 @@ const feedbackItems = ref([
 
 const activeTab = ref('comments')
 const showLocationPicker = ref(false)
-const selectedLocation = ref<{lat: number, lng: number} | null>(null)
-const selectedFeedback = ref<any>(null)
+const selectedLocation = ref<{ lat: number; lng: number } | null>(null)
+const selectedFeedback = ref<Feedback | null>(null)
 const showFeedbackModal = ref(false)
 
 const feedbackCategories = ref([
@@ -96,12 +124,12 @@ const feedbackForm = ref({
   category: '',
   title: '',
   description: '',
-  location: null as {lat: number, lng: number} | null
+  location: null as { lat: number; lng: number } | null
 })
 
 // Add a new comment
-const addComment = (newComment: any) => {
-  const commentObj = {
+const addComment = (newComment: { author: string; content: string }) => {
+  const commentObj: Comment = {
     id: comments.value.length + 10,
     author: newComment.author,
     date: new Date().toISOString(),
@@ -109,28 +137,26 @@ const addComment = (newComment: any) => {
     likes: 0,
     replies: []
   }
-  
   comments.value.unshift(commentObj)
 }
 
 // Add a reply to a comment
-const addReply = (commentId: number, reply: any) => {
+const addReply = (commentId: string | number, reply: { author: string; content: string }) => {
   const comment = comments.value.find(c => c.id === commentId)
   if (comment) {
-    const replyObj = {
+    const replyObj: Reply = {
       id: Date.now(),
       author: reply.author,
       date: new Date().toISOString(),
       content: reply.content,
       likes: 0
     }
-    
     comment.replies.push(replyObj)
   }
 }
 
 // Like a comment
-const likeComment = (commentId: number, isReply = false, parentId = null) => {
+const likeComment = (commentId: string | number, isReply = false, parentId: string | number | null = null) => {
   if (!isReply) {
     const comment = comments.value.find(c => c.id === commentId)
     if (comment) {
@@ -153,7 +179,7 @@ const openLocationPicker = () => {
 }
 
 // Handle location selection
-const handleLocationSelect = (location: {lat: number, lng: number}) => {
+const handleLocationSelect = (location: { lat: number; lng: number }) => {
   selectedLocation.value = location
   feedbackForm.value.location = location
   showLocationPicker.value = false
@@ -165,8 +191,8 @@ const submitFeedback = () => {
     alert('Please fill in all required fields')
     return
   }
-  
-  const newFeedback = {
+
+  const newFeedback: Feedback = {
     id: Date.now(),
     author: feedbackForm.value.name,
     date: new Date().toISOString(),
@@ -176,9 +202,9 @@ const submitFeedback = () => {
     location: feedbackForm.value.location,
     status: 'New'
   }
-  
+
   feedbackItems.value.unshift(newFeedback)
-  
+
   // Reset form
   feedbackForm.value = {
     name: '',
@@ -188,13 +214,13 @@ const submitFeedback = () => {
     description: '',
     location: null
   }
-  
+
   selectedLocation.value = null
   activeTab.value = 'comments'
 }
 
 // View feedback details
-const viewFeedbackDetails = (feedback: any) => {
+const viewFeedbackDetails = (feedback: Feedback) => {
   selectedFeedback.value = feedback
   showFeedbackModal.value = true
 }

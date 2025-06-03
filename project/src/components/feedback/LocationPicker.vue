@@ -51,20 +51,20 @@ onUnmounted(() => {
 
 const updateMarker = () => {
   if (!map || !selectedLocation.value) return
-  
+
   // Remove existing marker
   if (marker) {
     map.removeLayer(marker)
   }
-  
+
   // Add new marker
   marker = L.marker(
     [selectedLocation.value.lat, selectedLocation.value.lng],
     { draggable: true }
   ).addTo(map)
-  
+
   // Update position if marker is dragged
-  marker.on('dragend', (e) => {
+  marker.on('dragend', (e: L.DragEndEvent) => {
     const newPos = e.target.getLatLng()
     selectedLocation.value = { lat: newPos.lat, lng: newPos.lng }
   })

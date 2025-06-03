@@ -18,12 +18,12 @@ interface Comment {
   replies?: Reply[]
 }
 
-const props = defineProps<{
+defineProps<{
   comments: Comment[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'reply', commentId: string | number, data: { author: string, content: string }): void
+  (e: 'reply', commentId: string | number, data: { author: string; content: string }): void
   (e: 'like', commentId: string | number, isReply?: boolean, parentId?: string | number | null): void
 }>()
 

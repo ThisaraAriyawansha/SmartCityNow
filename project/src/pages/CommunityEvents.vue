@@ -2,13 +2,31 @@
 import EventCard from '../components/events/EventCard.vue'
 import RegisterForm from '../components/events/RegisterForm.vue'
 import { ref } from 'vue'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+
+interface Event {
+  id: number
+  title: string
+  date: string
+  time: string
+  location: string
+  description: string
+  image: string
+  spots: number
+  remaining: number
+}
+
+interface UserData {
+  name?: string
+  email?: string
+  [key: string]: any
+}
 
 const showRegistrationForm = ref(false)
-const selectedEvent = ref(null)
+const selectedEvent = ref<Event | null>(null)
 const registrationStatus = ref('')
 
-const openRegistration = (event) => {
+const openRegistration = (event: Event) => {
   selectedEvent.value = event
   showRegistrationForm.value = true
 }
@@ -18,7 +36,7 @@ const closeRegistration = () => {
   registrationStatus.value = ''
 }
 
-const handleRegistration = async (userData) => {
+const handleRegistration = async (userData: UserData) => {
   try {
     const response = await axios.post('http://localhost:3000/api/register', {
       event: selectedEvent.value,
@@ -26,10 +44,10 @@ const handleRegistration = async (userData) => {
     })
     registrationStatus.value = response.data.message
   } catch (error) {
-    registrationStatus.value = error.response?.data?.error || 'Registration failed'
+    const axiosError = error as AxiosError<{ error?: string }>
+    registrationStatus.value = axiosError.response?.data?.error || 'Registration failed'
   }
 }
-
 
 const upcomingEvents = [
   {
