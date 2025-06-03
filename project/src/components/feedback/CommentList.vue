@@ -1,30 +1,47 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const props = defineProps({
-  comments: {
-    type: Array,
-    required: true
-  }
-})
+interface Reply {
+  id: string | number
+  author: string
+  content: string
+  date: string
+  likes: number
+}
 
-const emit = defineEmits(['reply', 'like'])
+interface Comment {
+  id: string | number
+  author: string
+  content: string
+  date: string
+  likes: number
+  replies?: Reply[]
+}
 
-const replyForms = ref({})
+const props = defineProps<{
+  comments: Comment[]
+}>()
 
-const showReplyForm = (commentId) => {
+const emit = defineEmits<{
+  (e: 'reply', commentId: string | number, data: { author: string, content: string }): void
+  (e: 'like', commentId: string | number, isReply?: boolean, parentId?: string | number | null): void
+}>()
+
+const replyForms = ref<Record<string | number, boolean>>({})
+
+const showReplyForm = (commentId: string | number) => {
   replyForms.value = {
     ...replyForms.value,
     [commentId]: !replyForms.value[commentId]
   }
 }
 
-const submitReply = (commentId, event) => {
+const submitReply = (commentId: string | number, event: Event) => {
   event.preventDefault()
-  const form = event.target
-  const author = form.author.value.trim()
-  const content = form.content.value.trim()
-  
+  const form = event.target as HTMLFormElement
+  const author = (form.author as HTMLInputElement).value.trim()
+  const content = (form.content as HTMLTextAreaElement).value.trim()
+
   if (author && content) {
     emit('reply', commentId, { author, content })
     form.reset()
@@ -32,7 +49,7 @@ const submitReply = (commentId, event) => {
   }
 }
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: string): string => {
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -43,7 +60,11 @@ const formatDate = (dateString) => {
   }).format(date)
 }
 
-const likeComment = (commentId, isReply = false, parentId = null) => {
+const likeComment = (
+  commentId: string | number,
+  isReply: boolean = false,
+  parentId: string | number | null = null
+) => {
   emit('like', commentId, isReply, parentId)
 }
 </script>
@@ -53,77 +74,79 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
     <h3 v-if="comments.length === 0" class="empty-message">
       No comments yet. Be the first to share your thoughts!
     </h3>
-    
+
     <div v-for="comment in comments" :key="comment.id" class="comment">
       <div class="comment-header">
         <div class="comment-author">{{ comment.author }}</div>
         <div class="comment-date">{{ formatDate(comment.date) }}</div>
       </div>
-      
+
       <div class="comment-content">
         {{ comment.content }}
       </div>
-      
+
       <div class="comment-actions">
-        <button class="action-btn like-btn" @click="likeComment(comment.id)">
+        <button aria-label="Like comment" class="action-btn like-btn" @click="likeComment(comment.id)">
           <span class="like-icon">👍</span> {{ comment.likes }}
         </button>
-        <button class="action-btn reply-btn" @click="showReplyForm(comment.id)">
+        <button aria-label="Reply to comment" class="action-btn reply-btn" @click="showReplyForm(comment.id)">
           Reply
         </button>
       </div>
-      
-      <!-- Reply Form -->
-      <div v-if="replyForms[comment.id]" class="reply-form-container">
-        <form class="reply-form" @submit="submitReply(comment.id, $event)">
-          <div class="form-group">
-            <label for="author" class="form-label">Your Name</label>
-            <input 
-              type="text" 
-              name="author" 
-              id="author" 
-              class="form-input" 
-              placeholder="Enter your name"
-              required
-            >
-          </div>
-          
-          <div class="form-group">
-            <label for="content" class="form-label">Your Reply</label>
-            <textarea 
-              name="content" 
-              id="content" 
-              class="form-input form-textarea" 
-              placeholder="Write your reply..."
-              required
-            ></textarea>
-          </div>
-          
-          <div class="form-actions">
-            <button type="button" class="btn btn-outline" @click="showReplyForm(comment.id)">
-              Cancel
-            </button>
-            <button type="submit" class="btn btn-primary">
-              Post Reply
-            </button>
-          </div>
-        </form>
-      </div>
-      
+
+      <!-- Reply Form with transition -->
+      <transition name="fade">
+        <div v-if="replyForms[comment.id]" class="reply-form-container">
+          <form class="reply-form" @submit="submitReply(comment.id, $event)">
+            <div class="form-group">
+              <label for="author" class="form-label">Your Name</label>
+              <input
+                type="text"
+                name="author"
+                id="author"
+                class="form-input"
+                placeholder="Enter your name"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="content" class="form-label">Your Reply</label>
+              <textarea
+                name="content"
+                id="content"
+                class="form-input form-textarea"
+                placeholder="Write your reply..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline" @click="showReplyForm(comment.id)">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Post Reply
+              </button>
+            </div>
+          </form>
+        </div>
+      </transition>
+
       <!-- Replies -->
-      <div v-if="comment.replies && comment.replies.length > 0" class="replies">
+      <div v-if="comment.replies?.length" class="replies">
         <div v-for="reply in comment.replies" :key="reply.id" class="reply">
           <div class="comment-header">
             <div class="comment-author">{{ reply.author }}</div>
             <div class="comment-date">{{ formatDate(reply.date) }}</div>
           </div>
-          
+
           <div class="comment-content">
             {{ reply.content }}
           </div>
-          
+
           <div class="comment-actions">
-            <button class="action-btn like-btn" @click="likeComment(reply.id, true, comment.id)">
+            <button aria-label="Like reply" class="action-btn like-btn" @click="likeComment(reply.id, true, comment.id)">
               <span class="like-icon">👍</span> {{ reply.likes }}
             </button>
           </div>
@@ -259,5 +282,13 @@ const likeComment = (commentId, isReply = false, parentId = null) => {
 
 .reply:last-child {
   margin-bottom: 0;
+}
+
+/* Transition for reply form */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
