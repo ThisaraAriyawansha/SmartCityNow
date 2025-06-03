@@ -396,7 +396,11 @@ const closeFeedbackModal = () => {
         
         <div class="success-grid">
           <div class="success-card">
-            <div class="success-icon">💡</div>
+            <img 
+              src="https://globalvoices.org/wp-content/uploads/2019/07/colombo-traffic-800x450.jpg" 
+              alt="Colombo Traffic Management" 
+              class="success-image"
+            >
             <h3>Colombo Traffic Management</h3>
             <p>
               Resident feedback led to smart traffic lights at 10 major intersections in Colombo,
@@ -405,7 +409,11 @@ const closeFeedbackModal = () => {
           </div>
           
           <div class="success-card">
-            <div class="success-icon">🚸</div>
+            <img 
+              src="https://harindabama.com/wp-content/uploads/2017/01/kd20.jpg?w=1008&h=672" 
+              alt="Kandy Pedestrian Safety" 
+              class="success-image"
+            >
             <h3>Kandy Pedestrian Safety</h3>
             <p>
               Community suggestions resulted in smart crosswalks with motion sensors near schools
@@ -414,7 +422,11 @@ const closeFeedbackModal = () => {
           </div>
           
           <div class="success-card">
-            <div class="success-icon">♻️</div>
+            <img 
+              src="https://unawatuna-beach.com/wp-content/uploads/2013/09/Galle-Park-Sri-Lanka01.jpg" 
+              alt="Galle Waste Management" 
+              class="success-image"
+            >
             <h3>Galle Waste Management</h3>
             <p>
               Feedback from Galle residents led to solar-powered smart waste bins that notify
@@ -431,7 +443,7 @@ const closeFeedbackModal = () => {
         <div class="modal-header">
           <h3>Select Location on Sri Lanka Map</h3>
           <button class="modal-close" @click="showLocationPicker = false">
-            &times;
+            ×
           </button>
         </div>
         <div class="modal-body">
@@ -449,7 +461,7 @@ const closeFeedbackModal = () => {
         <div class="modal-header">
           <h3>{{ selectedFeedback?.title }}</h3>
           <button class="modal-close" @click="closeFeedbackModal">
-            &times;
+            ×
           </button>
         </div>
         <div class="modal-body">
@@ -464,8 +476,6 @@ const closeFeedbackModal = () => {
             <h4>Description:</h4>
             <p>{{ selectedFeedback?.description }}</p>
           </div>
-          
-
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" @click="closeFeedbackModal">Close</button>
@@ -669,9 +679,24 @@ const closeFeedbackModal = () => {
   text-align: center;
 }
 
-.success-icon {
-  font-size: 2.5rem;
+.success-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius);
   margin-bottom: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .success-image {
+    height: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .success-image {
+    height: 180px;
+  }
 }
 
 .success-card h3 {
@@ -755,13 +780,6 @@ const closeFeedbackModal = () => {
 
 .feedback-description {
   margin-top: var(--space-4);
-}
-
-.mini-map {
-  height: 200px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-top: var(--space-3);
 }
 
 .status-badge {
